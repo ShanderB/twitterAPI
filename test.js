@@ -16,37 +16,45 @@ var client = new Twitter({
 });
 
 /* 
-var params = {screen_name: 'luizavienel', count: 10, exclude_replies: true};
+var paramsLu = {screen_name: 'luizavienel', count: 10, exclude_replies: true};
 
-client.get('statuses/user_timeline', params, function (error, tweets, response) {
-  if (!error) {
-    console.log(Object.keys(tweets));
+    client.get('statuses/user_timeline', paramsLu, function (error, tweets, response) {
+      if (!error) {
+        console.log(Object.keys(tweets));
 
-    tweets.forEach(element => {
-      console.log(`"${element.text}"`);
-    });
-  }
-}); */
+        tweets.forEach(element => {
+          console.log(`"${element.text}"`);
+        });
+      }
+    }); */
 
 /* 
 client.post('statuses/update', {status: 'I L2ov3e Twitter'})
   .then(function (response) {
-    console.log(response);
   })
   .catch(function (error) {
     console.log(`\n=\n==\n====\n=================${error[0].message}=================\n====\n===\n==\n=`)
   })
  */
 
+//*Excluir todos os tweets
+/* 
+var paramsShander = { screen_name: 'ajaxmumakil' };
 
+client.get('statuses/user_timeline', paramsShander)
+  .then((response) => {
+    response.forEach((it) => {
 
-  var id = 1441182358049202188
-
-client.post('statuses/destroy/1441182358049202188', {id: id}).then((response) => {  //! Verificar como enviar a requisição. Chumbando o valor, passa normal
-  console.log(response)
-}).catch((error) => {
-  console.log(error)
-  // console.log(`\n=\n==\n====\n=================${error[0].message}=================\n====\n===\n==\n=`)
-})
-
-
+      var varID = (it.id_str).toString()
+      client.post('statuses/destroy/', { id: varID }).then((response) => {
+        console.log(`[${it.id_str}] Success : "${it.text}"`)
+      })
+        .catch((error) => {
+          console.log(`\n=\n==\n====\n=================${error[0].message}=================\n====\n===\n==\n=`)
+        })
+    })
+  })
+  .catch((error) => {
+    console.log(`\n=\n==\n====\n=================${error[0].message}=================\n====\n===\n==\n=`)
+  })
+ */
