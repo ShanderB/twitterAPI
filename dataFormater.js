@@ -7,7 +7,7 @@ const f = (data) => {
     var year = data.created_at.substring(26);
     var minutes = data.created_at.substring(14, 16);
     var hour = data.created_at.substring(11, 13);
-    var seconds = data.created_at.substring(11, 13);
+    var seconds = data.created_at.substring(17, 19);
 
     return `${year}-${month}-${day}T${hour}:${minutes}:${seconds}`;
 }
