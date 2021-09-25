@@ -1,6 +1,6 @@
 const f = (month) => {
 
-    switch(month.toLowerCase()){
+    switch (month.toLowerCase()) {
         case "jan":
             return "01"
         case "feb":
