@@ -5,8 +5,9 @@
  * 
  */
 
-var Twitter = require('twitter');
-var credenc = require('./variable.json')
+const Twitter = require('twitter');
+const credenc = require('./variable.json')
+const dataFormater = require('./dataFormater')
 
 //Autenticação app
 var client = new Twitter({
@@ -22,10 +23,14 @@ client.get('statuses/user_timeline', paramsLu)
   .then((tweets) => {
     console.log(tweets)
     var a = new Date() //tweets.created_at
-    console.log(month)
+    var full = dataFormater(tweets[0])
+
+    console.log(typeof(full))
+    console.log(typeof(a))
   })
   .catch((error) => {
-    console.log(`\n=\n==\n====\n=================${error[0].message}=================\n====\n===\n==\n=`)
+    // console.log(`\n=\n==\n====\n=================${error[0].message}=================\n====\n===\n==\n=`)
+    console.log(`${error}`)
   })
 
 
