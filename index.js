@@ -8,6 +8,7 @@
 var Twitter = require('twitter');
 var credenc = require('./variable.json')
 
+//Autenticação app
 var client = new Twitter({
   consumer_key: credenc.consumer_key,
   consumer_secret: credenc.consumer_secret,
@@ -15,29 +16,21 @@ var client = new Twitter({
   access_token_secret: credenc.access_token_secret,
 });
 
-/* 
-*Puxar os tweets
-*     @params
-*       count: puta todos os últimos tweets, incluindo respostas
-*
+var paramsLu = { screen_name: 'luizavienel', count: 1, exclude_replies: true, include_rts: false };
 
-*/
+client.get('statuses/user_timeline', paramsLu)
+  .then((tweets) => {
+    console.log(tweets)
+    var a = new Date() //tweets.created_at
+    console.log(month)
+  })
+  .catch((error) => {
+    console.log(`\n=\n==\n====\n=================${error[0].message}=================\n====\n===\n==\n=`)
+  })
 
-/* 
-var paramsLu = {screen_name: 'luizavienel', count: 10, exclude_replies: true};
-
-    client.get('statuses/user_timeline', paramsLu, function (error, tweets, response) {
-      if (!error) {
-        console.log(Object.keys(tweets));
-
-        tweets.forEach(element => {
-          console.log(`"${element.text}"`);
-        });
-      }
-    }); */
 
 //*Postar algo
-/* 
+/*
 client.post('statuses/update', {status: 'I L2ov3e Twitter'})
   .then(function (response) {
   })
@@ -46,10 +39,11 @@ client.post('statuses/update', {status: 'I L2ov3e Twitter'})
   })
  */
 
-//*Excluir todos os tweets
-/* 
-var paramsShander = { screen_name: 'ajaxmumakil' };
 
+
+//*Excluir todos os tweets
+/*
+var paramsShander = { screen_name: 'ajaxmumakil' };
 client.get('statuses/user_timeline', paramsShander)
   .then((response) => {
     response.forEach((it) => {
@@ -67,3 +61,24 @@ client.get('statuses/user_timeline', paramsShander)
     console.log(`\n=\n==\n====\n=================${error[0].message}=================\n====\n===\n==\n=`)
   })
  */
+/*
+
+
+
+*Puxar os tweets
+*     @params
+*       count: puta todos os últimos tweets, incluindo respostas
+*
+*/
+/* Puxar
+var paramsLu = {screen_name: 'luizavienel', count: 10, exclude_replies: true};
+
+    client.get('statuses/user_timeline', paramsLu, function (error, tweets, response) {
+      if (!error) {
+        console.log(Object.keys(tweets));
+
+        tweets.forEach(element => {
+          console.log(`"${element.text}"`);
+        });
+      }
+    }); */
