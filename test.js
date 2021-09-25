@@ -16,6 +16,14 @@ var client = new Twitter({
 });
 
 /* 
+*Puxar os tweets
+*     @params
+*       count: puta todos os últimos tweets, incluindo respostas
+*
+
+*/
+
+/* 
 var paramsLu = {screen_name: 'luizavienel', count: 10, exclude_replies: true};
 
     client.get('statuses/user_timeline', paramsLu, function (error, tweets, response) {
@@ -28,6 +36,7 @@ var paramsLu = {screen_name: 'luizavienel', count: 10, exclude_replies: true};
       }
     }); */
 
+//*Postar algo
 /* 
 client.post('statuses/update', {status: 'I L2ov3e Twitter'})
   .then(function (response) {
