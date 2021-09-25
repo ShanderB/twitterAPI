@@ -6,8 +6,9 @@
  */
 
 const Twitter = require('twitter');
-const credenc = require('./variable.json')
-const dataFormater = require('./dataFormater')
+const credenc = require('./variable.json');
+const dataFormater = require('./dataFormater');
+const dateJS = require('datejs');
 
 //Autenticação app
 var client = new Twitter({
@@ -35,7 +36,7 @@ client.get('statuses/user_timeline', paramsLu)
   })
 
 
-//*Postar algo
+//*Postar twewt
 /*
 client.post('statuses/update', {status: 'I L2ov3e Twitter'})
   .then(function (response) {
