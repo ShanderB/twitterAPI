@@ -1,9 +1,15 @@
-    //Sat Sep 25 15:18:42 +0000 2021
-function formatDate(data){
+const formatMonth = require('./monthFormatter.js');
 
-    var day = data.created_at.substring(8,10);
-    var month = data[0].created_at.substring(4,7);
-    var year = data[0].created_at.substring(26);
-    var minutes = data[0].created_at.substring(14,16);
-    var hour = data[0].created_at.substring(11,13);
+const f = (data) => {
+
+    var day = data.created_at.substring(8, 10);
+    var month = formatMonth(data.created_at.substring(4, 7));
+    var year = data.created_at.substring(26);
+    var minutes = data.created_at.substring(14, 16);
+    var hour = data.created_at.substring(11, 13);
+    var seconds = data.created_at.substring(11, 13);
+
+    return `${year}-${month}-${day}T${hour}:${minutes}:${seconds}`;
 }
+
+module.exports = f;
