@@ -21,12 +21,13 @@ var paramsLu = { screen_name: 'luizavienel', count: 1, exclude_replies: true, in
 
 client.get('statuses/user_timeline', paramsLu)
   .then((tweets) => {
-    console.log(tweets)
-    var a = new Date() //tweets.created_at
-    var full = dataFormater(tweets[0])
 
-    console.log(typeof(full))
-    console.log(typeof(a))
+   let controlDate = new Date()
+   let postDate = new Date(dataFormater(tweets[0]))
+
+   console.log(controlDate)
+   console.log(postDate)  //2h 14m
+
   })
   .catch((error) => {
     // console.log(`\n=\n==\n====\n=================${error[0].message}=================\n====\n===\n==\n=`)
