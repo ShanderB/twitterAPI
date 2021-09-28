@@ -8,7 +8,7 @@
 const Twitter = require('twitter');
 const credenc = require('./variable.json');
 const dataFormater = require('./dataFormater');
-const dateJS = require('datejs');
+require('datejs');
 
 //Autenticação app
 var client = new Twitter({
@@ -23,11 +23,28 @@ var paramsLu = { screen_name: 'luizavienel', count: 1, exclude_replies: true, in
 client.get('statuses/user_timeline', paramsLu)
   .then((tweets) => {
 
-   let controlDate = new Date()
-   let postDate = new Date(dataFormater(tweets[0]))
+    let controlDate = new Date(); 
+    let postDate = new Date(dataFormater(tweets[0])).addHours(-3);//"simple" timeZone :D
 
-   console.log(controlDate)
-   console.log(postDate)  //2h 14m
+   /*  if(postDate.getHours() <= controlDate.getHours() ){
+      se(valorA - valorB <= 1 hora)
+
+      console.log(postDate)
+
+    } */
+    console.log(postDate)
+    console.log(controlDate)
+
+
+    console.log("PostH: " + postDate.getHours())
+    console.log("controlH: " + controlDate.getHours())
+    console.log("PostM: " + postDate.getMinutes())
+    console.log("controlM: " + controlDate.getMinutes())
+    console.log("PostS: " + postDate.getSeconds())
+    console.log("controlS: " + controlDate.getSeconds())
+    
+
+    // console.log(postDate.getElapsed(controlDate))
 
   })
   .catch((error) => {
