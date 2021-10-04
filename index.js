@@ -9,6 +9,7 @@ const Twitter = require('twitter');
 const credenc = require('./variable.json');
 const dataFormater = require('./dataFormater');
 require('datejs');
+const notifier = require('node-notifier');
 
 //Autenticação app
 var client = new Twitter({
@@ -25,23 +26,37 @@ client.get('statuses/user_timeline', paramsLu)
 
     let controlDate = new Date(); 
     let postDate = new Date(dataFormater(tweets[0])).addHours(-3);//"simple" timeZone :D
+    let horaControl = postDate.getHours() - controlDate.getHours();
 
-   /*  if(postDate.getHours() <= controlDate.getHours() ){
-      se(valorA - valorB <= 1 hora)
+     if(horaControl <= -1){
+      notifier.notify(
+        {
+          title: 'Novo post luiza',
+          message: 'Hello from node, Mr. User!',           //!Verificar se é retweet. Se sim, ignora, ou sei lá.
+        },
+        function (err, response, metadata) {
+          console.log(response)
+          // Response is response from notification
+          // Metadata contains activationType, activationAt, deliveredAt
+        }
+      );
 
-      console.log(postDate)
+      console.log(postDate.getHours())
+      console.log(controlDate.getHours())
+      console.log(horaControl)
+     // console.log(postDate)
+     // console.log(controlDate)
 
-    } */
-    console.log(postDate)
-    console.log(controlDate)
+    } 
 
-
-    console.log("PostH: " + postDate.getHours())
-    console.log("controlH: " + controlDate.getHours())
-    console.log("PostM: " + postDate.getMinutes())
-    console.log("controlM: " + controlDate.getMinutes())
-    console.log("PostS: " + postDate.getSeconds())
-    console.log("controlS: " + controlDate.getSeconds())
+// 
+// 
+    // console.log("PostH: " + postDate.getHours())
+    // console.log("controlH: " + controlDate.getHours())
+    // console.log("PostM: " + postDate.getMinutes())
+    // console.log("controlM: " + controlDate.getMinutes())
+    // console.log("PostS: " + postDate.getSeconds())
+    // console.log("controlS: " + controlDate.getSeconds())
     
 
     // console.log(postDate.getElapsed(controlDate))
@@ -49,7 +64,7 @@ client.get('statuses/user_timeline', paramsLu)
   })
   .catch((error) => {
     // console.log(`\n=\n==\n====\n=================${error[0].message}=================\n====\n===\n==\n=`)
-    console.log(`${error}`)
+    console.log(error)
   })
 
 
