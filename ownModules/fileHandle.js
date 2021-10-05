@@ -9,4 +9,13 @@ async function readFile() {
     });
   }
 
+  async function writeFile() {
+    return new Promise((resolve, reject) => {
+      fs.writeFile('./data/config.txt', function (err, data) {
+        if (err) reject(err);
+        resolve(data);
+      });
+    });
+  }
+
 module.exports = readFile;
