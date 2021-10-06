@@ -6,10 +6,14 @@
  */
 
 const Twitter = require('twitter');
-const credenc = require('./variable.json');
-const dataFormater = require('./dataFormater');
+const credenc = require('./ownModules/variable.json');
+const dataFormater = require('./ownModules/dataFormater');
+const { readFile, writeFile } = require('./ownModules/fileHandle');
 require('datejs');
 const notifier = require('node-notifier');
+const open = require('open');
+
+
 
 //Autenticação app
 var client = new Twitter({
@@ -19,45 +23,77 @@ var client = new Twitter({
   access_token_secret: credenc.access_token_secret,
 });
 
-var paramsLu = { screen_name: 'luizavienel', count: 1, exclude_replies: true, include_rts: false };
+var paramsLu = { screen_name: 'ajaxmumakil', count: 1, exclude_replies: true, include_rts: false };
 
 client.get('statuses/user_timeline', paramsLu)
   .then((tweets) => {
 
-    let controlDate = new Date(); 
+
+    let controlDate = new Date();
     let postDate = new Date(dataFormater(tweets[0])).addHours(-3);//"simple" timeZone :D
     let horaControl = postDate.getHours() - controlDate.getHours();
 
-     if(horaControl <= -1){
-      notifier.notify(
-        {
-          title: 'Novo post luiza',
-          message: 'Hello from node, Mr. User!',           //!Verificar se é retweet. Se sim, ignora, ou sei lá.
-        },
-        function (err, response, metadata) {
-          console.log(response)
-          // Response is response from notification
-          // Metadata contains activationType, activationAt, deliveredAt
-        }
-      );
 
-      console.log(postDate.getHours())
-      console.log(controlDate.getHours())
-      console.log(horaControl)
-     // console.log(postDate)
-     // console.log(controlDate)
+    let postDaLuiza = new Date("2021-10-04T09:40:00").getHours()
+    let valorPadrao = new Date("2021-10-04T10:40:00").getHours()
 
-    } 
+    if ((postDaLuiza - valorPadrao) <= -1) {
+      readFile().then((response) => {
+        // if (response.toString() !== tweets[0].id_str) {
+          writeFile(tweets[0].id_str);
+          notifier.notify(  //!jogar essa function para outro arquivo e adicionar o link para ir direto para o post
+            {
+              title: 'Novo post luiza',
+              message: 'Hello from node, Mr. User!',
+            }
+          );
 
-// 
-// 
+        // }
+        notifier.on('click', (notifierObject, options, event) => {
+         open(`https://twitter.com/luizavienel/status/${tweets[0].id_str}`)
+        });
+
+      }).catch(() => { writeFile(tweets[0].id_str) });
+    }
+    /* 
+    fs.writeFile('./data/config.txt', tweets[0].id_str, function (err) {
+      if (err) {
+        console.log(err.message);
+        return;
+      }
+      console.log('Configuration saved successfully.');
+    }); */
+
+    //  if(horaControl <= -1){
+    //   notifier.notify(
+    //     {
+    //       title: 'Novo post luiza',
+    //       message: 'Hello from node, Mr. User!',           //!Verificar se é retweet. Se sim, ignora, ou sei lá.
+    //     },
+    //     function (err, response, metadata) {
+    //       console.log(response)
+    //       // Response is response from notification
+    //       // Metadata contains activationType, activationAt, deliveredAt
+    //     }
+    //   );
+    //
+    //   console.log(postDate.getHours())
+    //   console.log(controlDate.getHours())
+    //   console.log(horaControl)
+    //  // console.log(postDate)
+    //  // console.log(controlDate)
+    //
+    // } 
+
+    // 
+    // 
     // console.log("PostH: " + postDate.getHours())
     // console.log("controlH: " + controlDate.getHours())
     // console.log("PostM: " + postDate.getMinutes())
     // console.log("controlM: " + controlDate.getMinutes())
     // console.log("PostS: " + postDate.getSeconds())
     // console.log("controlS: " + controlDate.getSeconds())
-    
+
 
     // console.log(postDate.getElapsed(controlDate))
 
