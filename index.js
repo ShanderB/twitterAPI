@@ -14,7 +14,6 @@ const notifier = require('node-notifier');
 const open = require('open');
 
 
-
 //Autenticação app
 var client = new Twitter({
   consumer_key: credenc.consumer_key,
@@ -47,7 +46,6 @@ client.get('statuses/user_timeline', paramsLu)
     throw error;
   })
 
-
 //*Postar twewt
 /*
 client.post('statuses/update', {status: 'I L2ov3e Twitter'})
@@ -57,8 +55,6 @@ client.post('statuses/update', {status: 'I L2ov3e Twitter'})
     console.log(`\n=\n==\n====\n=================${error[0].message}=================\n====\n===\n==\n=`)
   })
  */
-
-
 
 //*Excluir todos os tweets
 /*
@@ -81,14 +77,12 @@ client.get('statuses/user_timeline', paramsShander)
   })
  */
 /*
-
-
-
 *Puxar os tweets
 *     @params
-*       count: puta todos os últimos tweets, incluindo respostas
+*       count: puxa todos os últimos tweets, incluindo respostas
 *
 */
+
 /* Puxar
 var paramsLu = {screen_name: 'luizavienel', count: 10, exclude_replies: true};
 
