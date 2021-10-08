@@ -69,12 +69,12 @@ client.get('statuses/user_timeline', paramsShander)
         console.log(`[${it.id_str}] Success : "${it.text}"`)
       })
         .catch((error) => {
-          console.log(`\n=\n==\n====\n=================${error[0].message}=================\n====\n===\n==\n=`)
+          console.log(`\n=\n==\n====\n=================${error[0]}=================\n====\n===\n==\n=`)
         })
-    })
+    }).catch((err)=>{console.log(err)})
   })
   .catch((error) => {
-    console.log(`\n=\n==\n====\n=================${error[0].message}=================\n====\n===\n==\n=`)
+    console.log(`\n=\n==\n====\n=================${error[0]}=================\n====\n===\n==\n=`)
   })
  */
 /*
