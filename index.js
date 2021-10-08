@@ -22,29 +22,30 @@ var client = new Twitter({
   access_token_secret: credenc.access_token_secret,
 });
 
-var paramsLu = { screen_name: 'luizavienel', count: 1, exclude_replies: true, include_rts: false };
+var paramsLu = { screen_name: 'luizavienel', count: 1/* , exclude_replies: true, include_rts: false */ };
+setInterval(() => {
 
-client.get('statuses/user_timeline', paramsLu)
+  client.get('statuses/user_timeline', paramsLu)
   .then((tweets) => {
     let controlDate = new Date();
-    let postDate = new Date(dataFormater(tweets[0])).addHours(-3);//"simple" timeZone :D
-    let horaControl = postDate.getHours() - controlDate.getHours();
+    console.log(`Executando: ${controlDate} \n`)
+    // let postDate = new Date(dataFormater(tweets[0])).addHours(-3);//"simple" timeZone :D
+    // let horaControl = postDate.getHours() - controlDate.getHours();
 
-    if (horaControl <= -1) {
       readFile().then((response) => {
         if (response.toString() !== tweets[0].id_str) {
           writeFile(tweets[0].id_str);
-
-          notifier.notify({ title: 'Novo post luiza', message: 'Hello from node, Mr. User!' });
+          notifier.notify({ title: 'Novo post luiza', message: '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!' });
 
           notifier.on('click', () => { open(`https://twitter.com/luizavienel/status/${tweets[0].id_str}`); });
         }
       }).catch(() => { console.log('creatingFile'); writeFile(tweets[0].id_str); });
-    }
   })
   .catch((error) => {
     throw error;
   })
+}, 60000)
+
 
 //*Postar twewt
 /*
