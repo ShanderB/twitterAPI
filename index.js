@@ -5,13 +5,12 @@
  * 
  */
 
+//const dataFormater = require('./ownModules/dataFormater'); *no needed anymore
 const Twitter = require('twitter');
-const credenc = require('./ownModules/variable.json');
-const dataFormater = require('./ownModules/dataFormater');
-const { readFile, writeFile } = require('./ownModules/fileHandle');
-require('datejs');
 const notifier = require('node-notifier');
 const open = require('open');
+const credenc = require('./ownModules/variable.json');
+const { readFile, writeFile } = require('./ownModules/fileHandle');
 const user = 'luizavienel'
 
 //Autenticação app
@@ -29,8 +28,6 @@ setInterval(() => {
     .then((tweets) => {
       let controlDate = new Date();
       console.log(`Executando: ${controlDate} \n`)
-      // let postDate = new Date(dataFormater(tweets[0])).addHours(-3);//"simple" timeZone :D
-      // let horaControl = postDate.getHours() - controlDate.getHours();
 
       readFile().then((response) => {
         if (response.toString() !== tweets[0].id_str) {
