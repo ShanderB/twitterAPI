@@ -12,7 +12,7 @@ const { readFile, writeFile } = require('./ownModules/fileHandle');
 require('datejs');
 const notifier = require('node-notifier');
 const open = require('open');
-
+const user = 'luizavienel'
 
 //Autenticação app
 var client = new Twitter({
@@ -21,31 +21,36 @@ var client = new Twitter({
   access_token_key: credenc.access_token,
   access_token_secret: credenc.access_token_secret,
 });
-
-var paramsLu = { screen_name: 'luizavienel', count: 1/* , exclude_replies: true, include_rts: false */ };
+/* 
+var paramsLu = { screen_name: user, count: 1, exclude_replies: true, include_rts: false };
 setInterval(() => {
 
   client.get('statuses/user_timeline', paramsLu)
-  .then((tweets) => {
-    let controlDate = new Date();
-    console.log(`Executando: ${controlDate} \n`)
-    // let postDate = new Date(dataFormater(tweets[0])).addHours(-3);//"simple" timeZone :D
-    // let horaControl = postDate.getHours() - controlDate.getHours();
+    .then((tweets) => {
+      let controlDate = new Date();
+      console.log(`Executando: ${controlDate} \n`)
+      // let postDate = new Date(dataFormater(tweets[0])).addHours(-3);//"simple" timeZone :D
+      // let horaControl = postDate.getHours() - controlDate.getHours();
 
       readFile().then((response) => {
         if (response.toString() !== tweets[0].id_str) {
+
           writeFile(tweets[0].id_str);
-          notifier.notify({ title: 'Novo post luiza', message: '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!' });
+          notifier.notify({ wait: true, title: 'Novo post luiza', message: '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!' });
 
           notifier.on('click', () => { open(`https://twitter.com/luizavienel/status/${tweets[0].id_str}`); });
+
+          setTimeout(() => {
+            notifier.removeAllListeners();
+          }, 40000);
         }
       }).catch(() => { console.log('creatingFile'); writeFile(tweets[0].id_str); });
-  })
-  .catch((error) => {
-    throw error;
-  })
+    })
+    .catch((error) => {
+      throw error;
+    })
 }, 60000)
-
+ */
 
 //*Postar twewt
 /*
@@ -58,9 +63,8 @@ client.post('statuses/update', {status: 'I L2ov3e Twitter'})
  */
 
 //*Excluir todos os tweets
-/*
-var paramsShander = { screen_name: 'ajaxmumakil' };
-client.get('statuses/user_timeline', paramsShander)
+/* 
+client.get('statuses/user_timeline', { screen_name: user })
   .then((response) => {
     response.forEach((it) => {
 
@@ -85,7 +89,7 @@ client.get('statuses/user_timeline', paramsShander)
 */
 
 /* Puxar
-var paramsLu = {screen_name: 'luizavienel', count: 10, exclude_replies: true};
+var paramsLu = {screen_name: user, count: 10, exclude_replies: true};
 
     client.get('statuses/user_timeline', paramsLu, function (error, tweets, response) {
       if (!error) {
