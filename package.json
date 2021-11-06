@@ -1,0 +1,24 @@
+{
+  "name": "twitterapi",
+  "version": "1.0.0",
+  "description": "Change the variable \"user\" to the username that you want.\r set a file with you file secrets, like this:",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShanderB/twitterAPI.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ShanderB/twitterAPI/issues"
+  },
+  "homepage": "https://github.com/ShanderB/twitterAPI#readme",
+  "dependencies": {
+    "node-notifier": "^10.0.0",
+    "open": "^8.4.0",
+    "twitter": "^1.7.1"
+  }
+}
