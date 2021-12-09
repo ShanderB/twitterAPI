@@ -11,7 +11,9 @@ const notifier = require('node-notifier');
 const open = require('open');
 const credenc = require('./ownModules/variable.json');
 const { readFile, writeFile } = require('./ownModules/fileHandle');
+const mongoose = require("mongoose");
 const user = 'luizavienel'
+var temporario = {meta:{next_token: 0}}
 
 //Autenticação app
 var client = new Twitter({
@@ -20,6 +22,7 @@ var client = new Twitter({
   access_token_key: credenc.access_token,
   access_token_secret: credenc.access_token_secret,
 });
+//*Notificar quando possuir um tweet novo
 /* 
 var paramsLu = { screen_name: user, count: 1, exclude_replies: true, include_rts: false };
 setInterval(() => {
@@ -85,8 +88,9 @@ client.get('statuses/user_timeline', { screen_name: user })
 *
 */
 
-/* Puxar
-var paramsLu = {screen_name: user, count: 10, exclude_replies: true};
+//Puxar
+/* 
+var paramsLu = {screen_name: "ajaxmumakil"};
 
     client.get('statuses/user_timeline', paramsLu, function (error, tweets, response) {
       if (!error) {
@@ -97,3 +101,63 @@ var paramsLu = {screen_name: user, count: 10, exclude_replies: true};
         });
       }
     }); */
+
+
+//meu 1436006435775713286
+//luiza 802246642195922946
+
+//Mongoose 
+
+require("./models/Tweets");
+const Tweets = mongoose.model("modelTweets")
+
+mongoose.connect("mongodb+srv://admin:admin@clustertwitter.6cqd5.mongodb.net/tweetsLuiza?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log("Conectado Banco");
+
+    client.get('https://api.twitter.com/2/users/802246642195922946/tweets', { max_results: 5, "tweet.fields": "created_at" })
+      .then((response) => {
+        response.data.forEach((it) => {
+          const novoTweet = {
+            text: it.text,
+            id: it.id,
+            created_at: it.created_at,
+            insertDB: Date.now() - 3 * 60 * 60 * 1000
+          }
+          new Tweets(novoTweet).save().then((res) => {
+            console.log(res);
+          }).catch((err) => { console.log(err) })
+        })
+        console.log(response.data)
+        console.log(!response.meta.next_token)
+
+      })
+      .catch((error) => { console.log(error) })
+  }).catch((err) => {
+    console.log(err);
+  });
+
+
+function puxarTweet(token) {
+  return new Promise((resolve) => {
+    let param = token ? { max_results: 5, pagination_token: token, "tweet.fields": "created_at" } : { max_results: 5, "tweet.fields": "created_at" };
+
+    client.get('https://api.twitter.com/2/users/1436006435775713286/tweets', param)
+      .then((response) => {
+        resolve(response)
+      })
+      .catch((error) => { console.log(error); })
+  })
+}
+
+(async function main() {
+    while (temporario.meta.next_token != undefined) {
+      if (!temporario) {
+        temporario = await puxarTweet()
+        console.log(temporario.meta.result_count)
+      } else {
+        temporario = await puxarTweet(temporario.meta.next_token)
+        console.log(temporario.meta.result_count)
+      }
+    }
+})()
