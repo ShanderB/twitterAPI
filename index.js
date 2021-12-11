@@ -13,7 +13,6 @@ const credenc = require('./ownModules/variable.json');
 const { readFile, writeFile } = require('./ownModules/fileHandle');
 const mongoose = require("mongoose");
 const user = 'luizavienel'
-var temporario = {meta:{next_token: 0}}
 
 //Autenticação app
 var client = new Twitter({
@@ -109,33 +108,16 @@ var paramsLu = {screen_name: "ajaxmumakil"};
 //Mongoose 
 
 require("./models/Tweets");
-const Tweets = mongoose.model("modelTweets")
+const modelTweets = mongoose.model("modelTweets")
 
 mongoose.connect("mongodb+srv://admin:admin@clustertwitter.6cqd5.mongodb.net/tweetsLuiza?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log("Conectado Banco");
-
     client.get('https://api.twitter.com/2/users/802246642195922946/tweets', { max_results: 5, "tweet.fields": "created_at" })
-      .then((response) => {
-        response.data.forEach((it) => {
-          const novoTweet = {
-            text: it.text,
-            id: it.id,
-            created_at: it.created_at,
-            insertDB: Date.now() - 3 * 60 * 60 * 1000
-          }
-          new Tweets(novoTweet).save().then((res) => {
-            console.log(res);
-          }).catch((err) => { console.log(err) })
-        })
-        console.log(response.data)
-        console.log(!response.meta.next_token)
 
-      })
-      .catch((error) => { console.log(error) })
-  }).catch((err) => {
-    console.log(err);
-  });
+    main()
+  })
+  .catch((error) => { console.log(error) })
 
 
 function puxarTweet(token) {
@@ -150,14 +132,62 @@ function puxarTweet(token) {
   })
 }
 
-(async function main() {
-    while (temporario.meta.next_token != undefined) {
-      if (!temporario) {
-        temporario = await puxarTweet()
-        console.log(temporario.meta.result_count)
+var dataFromResponse = false
+var breakControl = 0
+async function main() {
+  try {
+    while (breakControl != 1) {
+      if (Boolean(dataFromResponse) == false) {
+        await puxarTweet()
+          .then((response) => {
+            response.data.forEach((it) => {
+              const novoTweet = {
+                text: it.text,
+                id: it.id,
+                created_at: it.created_at,
+                insertDB: Date.now() - 3 * 60 * 60 * 1000
+              }
+              new modelTweets(novoTweet).save().then((res) => {
+                console.log(res.insertDB);
+              })
+              if (response.meta.next_token == undefined) {
+                breakControl = 1
+              }
+              dataFromResponse = response
+            })
+          })
+
       } else {
-        temporario = await puxarTweet(temporario.meta.next_token)
-        console.log(temporario.meta.result_count)
+        await puxarTweet(dataFromResponse.meta.next_token)
+          .then((response) => {
+            if (Boolean(response.meta.next_token) == false) {
+              console.log("disconnect")
+              // mongoose.disconnect()  //!verificar como fechar a conexão com o banco. Se colocar aqui, ele entra e desconecta o banco, e dá block nas próximas execuções.
+              return breakControl = 1
+            }
+            response.data.forEach((it) => {
+              const novoTweet = {
+                text: it.text,
+                id: it.id,
+                created_at: it.created_at,
+                insertDB: Date.now() - 3 * 60 * 60 * 1000
+              }
+              new modelTweets(novoTweet).save().then((res) => {
+                console.log(res.insertDB);
+              })
+              if (response.meta.next_token == undefined) {
+                breakControl = 1
+              }
+            })
+            dataFromResponse = response
+          })
       }
     }
-})()
+  } catch (e) {
+    console.log(e);
+    mongoose.disconnect()
+  }
+}
+
+
+
