@@ -49,7 +49,7 @@ async function main() {
                 breakControl = 1
               }
             })
-            
+
             dataFromResponse = response
           })
       }
