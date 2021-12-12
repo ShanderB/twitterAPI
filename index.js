@@ -6,21 +6,13 @@
  */
 
 //const dataFormater = require('./ownModules/dataFormater'); *no needed anymore
-const Twitter = require('twitter');
 const notifier = require('node-notifier');
 const open = require('open');
-const credenc = require('./ownModules/variable.json');
 const { readFile, writeFile } = require('./ownModules/fileHandle');
-const mongoose = require("mongoose");
 const user = 'luizavienel'
 
 //Autenticação app
-var client = new Twitter({
-  consumer_key: credenc.consumer_key,
-  consumer_secret: credenc.consumer_secret,
-  access_token_key: credenc.access_token,
-  access_token_secret: credenc.access_token_secret,
-});
+
 //*Notificar quando possuir um tweet novo
 /* 
 var paramsLu = { screen_name: user, count: 1, exclude_replies: true, include_rts: false };
@@ -106,31 +98,18 @@ var paramsLu = {screen_name: "ajaxmumakil"};
 //luiza 802246642195922946
 
 //Mongoose 
-
+const mongoose = require("mongoose");
 require("./models/Tweets");
 const modelTweets = mongoose.model("modelTweets")
-
-mongoose.connect("mongodb+srv://admin:admin@clustertwitter.6cqd5.mongodb.net/tweetsLuiza?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log("Conectado Banco");
-    client.get('https://api.twitter.com/2/users/802246642195922946/tweets', { max_results: 5, "tweet.fields": "created_at" })
-
-    main()
-  })
-  .catch((error) => { console.log(error) })
+const connectBd = require('./ownModules/mongoose');
+const puxarTweet = require('./ownModules/puxarTweet');
 
 
-function puxarTweet(token) {
-  return new Promise((resolve) => {
-    let param = token ? { max_results: 5, pagination_token: token, "tweet.fields": "created_at" } : { max_results: 5, "tweet.fields": "created_at" };
 
-    client.get('https://api.twitter.com/2/users/1436006435775713286/tweets', param)
-      .then((response) => {
-        resolve(response)
-      })
-      .catch((error) => { console.log(error); })
-  })
-}
+connectBd()
+setTimeout(() => {
+  main()              //!verificar um jeito de fazer isso melhor.
+}, 5000);
 
 var dataFromResponse = false
 var breakControl = 0
@@ -161,7 +140,6 @@ async function main() {
         await puxarTweet(dataFromResponse.meta.next_token)
           .then((response) => {
             if (Boolean(response.meta.next_token) == false) {
-              console.log("disconnect")
               // mongoose.disconnect()  //!verificar como fechar a conexão com o banco. Se colocar aqui, ele entra e desconecta o banco, e dá block nas próximas execuções.
               return breakControl = 1
             }
