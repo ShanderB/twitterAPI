@@ -44,10 +44,6 @@ async function main() {
               new modelTweets(formatarDados(it)).save().then((res) => {
                 console.log(res.insertDB);
               })
-
-              if (response.meta.next_token == undefined) {
-                breakControl = 1
-              }
             })
 
             dataFromResponse = response
