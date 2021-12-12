@@ -98,74 +98,18 @@ var paramsLu = {screen_name: "ajaxmumakil"};
 //luiza 802246642195922946
 
 //Mongoose 
-const mongoose = require("mongoose");
-require("./models/Tweets");
-const modelTweets = mongoose.model("modelTweets")
+
 const connectBd = require('./ownModules/mongoose');
-const puxarTweet = require('./ownModules/puxarTweet');
+const main = require('./ownModules/main');
 
-
+//todo dar um jeito de fechar a conexão.
 
 connectBd()
 setTimeout(() => {
   main()              //!verificar um jeito de fazer isso melhor.
-}, 5000);
+}, 3000);
 
-var dataFromResponse = false
-var breakControl = 0
-async function main() {
-  try {
-    while (breakControl != 1) {
-      if (Boolean(dataFromResponse) == false) {
-        await puxarTweet()
-          .then((response) => {
-            response.data.forEach((it) => {
-              const novoTweet = {
-                text: it.text,
-                id: it.id,
-                created_at: it.created_at,
-                insertDB: Date.now() - 3 * 60 * 60 * 1000
-              }
-              new modelTweets(novoTweet).save().then((res) => {
-                console.log(res.insertDB);
-              })
-              if (response.meta.next_token == undefined) {
-                breakControl = 1
-              }
-              dataFromResponse = response
-            })
-          })
 
-      } else {
-        await puxarTweet(dataFromResponse.meta.next_token)
-          .then((response) => {
-            if (Boolean(response.meta.next_token) == false) {
-              // mongoose.disconnect()  //!verificar como fechar a conexão com o banco. Se colocar aqui, ele entra e desconecta o banco, e dá block nas próximas execuções.
-              return breakControl = 1
-            }
-            response.data.forEach((it) => {
-              const novoTweet = {
-                text: it.text,
-                id: it.id,
-                created_at: it.created_at,
-                insertDB: Date.now() - 3 * 60 * 60 * 1000
-              }
-              new modelTweets(novoTweet).save().then((res) => {
-                console.log(res.insertDB);
-              })
-              if (response.meta.next_token == undefined) {
-                breakControl = 1
-              }
-            })
-            dataFromResponse = response
-          })
-      }
-    }
-  } catch (e) {
-    console.log(e);
-    mongoose.disconnect()
-  }
-}
 
 
 
