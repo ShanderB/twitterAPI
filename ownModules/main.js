@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const puxarTweet = require('./puxarTweet');
+const puxarTweetId = require('./puxarTweetId');
 const formatarDados = require('../models/jsonInsertModel');
 require("../models/mongoose/Tweets");
 const modelTweets = mongoose.model("modelTweets")
@@ -12,7 +12,7 @@ async function main() {
 
       if (Boolean(dataFromResponse) == false) {
 
-        await puxarTweet()
+        await puxarTweetId()
           .then((response) => {
 
             response.data.forEach((it) => {
@@ -31,7 +31,7 @@ async function main() {
 
       } else {
 
-        await puxarTweet(dataFromResponse.meta.next_token)
+        await puxarTweetId(dataFromResponse.meta.next_token)
           .then((response) => {
 
             if (Boolean(response.meta.next_token) == false) {

@@ -81,17 +81,18 @@ client.get('statuses/user_timeline', { screen_name: user })
 
 //Puxar
 /* 
-var paramsLu = {screen_name: "ajaxmumakil"};
+var paramsLu = {screen_name: "marcofalcaoo"};
+const client = require("./ownModules/buildAuth")
 
     client.get('statuses/user_timeline', paramsLu, function (error, tweets, response) {
       if (!error) {
         console.log(Object.keys(tweets));
 
         tweets.forEach(element => {
-          console.log(`"${element.text}"`);
+          console.log(element);
         });
       }
-    }); */
+    });  */
 
 
 //meu 1436006435775713286

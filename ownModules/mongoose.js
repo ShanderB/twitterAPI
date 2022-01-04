@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 function connectBd() {
-    mongoose.connect("mongodb+srv://admin:admin@clustertwitter.6cqd5.mongodb.net/tweetsLuiza?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true })
+    mongoose.connect("mongodb://admin:admin@localhost:27017", { useNewUrlParser: true, useUnifiedTopology: true })
         .then(() => {
 console.log("CONECTED")
         })
