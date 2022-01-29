@@ -10,12 +10,13 @@ const notifier = require('node-notifier');
 const open = require('open');
 const { readFile, writeFile } = require('./ownModules/fileHandle');
 const user = 'luizavienel'
+const credenc = require('../ownModules/variable.json');
 
 //Autenticação app
 
 //*Notificar quando possuir um tweet novo
 /* 
-var paramsLu = { screen_name: user, count: 1, exclude_replies: true, include_rts: false };
+var paramsLu = { screen_name: credenc.otherUser, count: 1, exclude_replies: true, include_rts: false };
 setInterval(() => {
 
   client.get('statuses/user_timeline', paramsLu)
@@ -27,9 +28,9 @@ setInterval(() => {
         if (response.toString() !== tweets[0].id_str) {
 
           writeFile(tweets[0].id_str);
-          notifier.notify({ wait: true, title: 'Novo post luiza', message: '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!' });
+          notifier.notify({ wait: true, title: 'Novo post', message: '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!' });
 
-          notifier.on('click', () => { open(`https://twitter.com/luizavienel/status/${tweets[0].id_str}`); });
+          notifier.on('click', () => { open(`https://twitter.com/credenc.otherUserString/status/${tweets[0].id_str}`); });
 
           setTimeout(() => {
             notifier.removeAllListeners();
@@ -55,7 +56,7 @@ client.post('statuses/update', {status: 'I L2ov3e Twitter'})
 
 //*Excluir todos os tweets
 /* 
-client.get('statuses/user_timeline', { screen_name: user })
+client.get('statuses/user_timeline', { screen_name: credenc.myUserString })
   .then((response) => {
     response.forEach((it) => {
 
@@ -81,7 +82,7 @@ client.get('statuses/user_timeline', { screen_name: user })
 
 //Puxar
 /* 
-var paramsLu = {screen_name: "marcofalcaoo"};
+var paramsLu = {screen_name: credenc.otherUserString};
 const client = require("./ownModules/buildAuth")
 
     client.get('statuses/user_timeline', paramsLu, function (error, tweets, response) {
@@ -93,10 +94,6 @@ const client = require("./ownModules/buildAuth")
         });
       }
     });  */
-
-
-//meu 1436006435775713286
-//luiza 802246642195922946
 
 //Mongoose 
 
